@@ -31,16 +31,16 @@ userRouter.post("/login",async(req,res)=>{
                 // result == true
                 if(result){
                     const token=jwt.sign({userID:user._id},"secret")
-                    res.status(200).send({token})
+                   return res.status(200).send({token})
                 }else{
-                    res.status(400).send({"msg":"Unauthorised"})
+                    return res.status(400).send({"msg":"Unauthorised"})
                 }
             });
         }else{
-            res.status(400).send({"msg":"user does not exist"})
+            return res.status(400).send({"msg":"user does not exist"})
         }
     } catch (error) {
-        res.status(401).send({"msg":error.message})
+        return res.status(401).send({"msg":error.message})
     }
 })
 
