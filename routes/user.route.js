@@ -40,7 +40,7 @@ userRouter.post("/login",async(req,res)=>{
             res.status(400).send({"msg":"user does not exist"})
         }
     } catch (error) {
-        res.send({"msg":error})
+        res.status(401).send({"msg":error.message})
     }
 })
 
