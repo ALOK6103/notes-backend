@@ -21,29 +21,26 @@ userRouter.post("/register", (req, res) => {
 });
 
 userRouter.post("/login", async (req, res) => {
-  const { email, pass } = req.body;
-  try {
-    let user = await UserModel.findOne({ email });
-    if (user) {
-      let hash = await bcrypt.compare(pass, user.pass);
-      if (!hash) {
-        return res.status(401).send("incorrect password");
-      } else {
-        const token = jwt.sign(
-          {
-            _id: user._id,
-            email: user.email,
-          },
-          "secret"
-        );
-        return res
-          .status(200)
-          .send({ token, user, message: "Login Successfully" });
-      }
+  const {email,pass}=req.body
+    
+    try {
+        const user=await UserModel.findOne({email})
+        if(user){
+            bcrypt.compare(pass, user.pass, function(err, result) {
+                // result == true
+                if(result){
+                    var token=jwt.sign({userID:user._id},"secret")
+                    res.status(200).send({token})
+                }else{
+                    res.status(400).send({"msg":"Unauthorised"})
+                }
+            });
+        }else{
+            res.status(400).send({"msg":"user does not exist"})
+        }
+    } catch (error) {
+        res.status(400).send({"msg":error})
     }
-  } catch (error) {
-    return res.status(404).send(error.message);
-  }
 });
 
 module.exports = {
