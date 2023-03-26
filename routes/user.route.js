@@ -30,7 +30,7 @@ userRouter.post("/login",async(req,res)=>{
             bcrypt.compare(pass, user.pass, function(err, result) {
                 // result == true
                 if(result){
-                    var token=jwt.sign({userID:user._id},"secret")
+                    const token=jwt.sign({userID:user._id},"secret")
                     res.status(200).send({token})
                 }else{
                     res.status(400).send({"msg":"Unauthorised"})
